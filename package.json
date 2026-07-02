@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "prisma generate && next build",
+    "jakkrapat": "next dev",
+    "neabbuild": "prisma generate && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "superneab": "git add . && git commit -m 'update' && git push"
   },
   "dependencies": {
     "@prisma/client": "^7.8.0",
