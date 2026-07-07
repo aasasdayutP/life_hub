@@ -7,55 +7,38 @@ export default async function JobsPage() {
 
   const today = getTodayRange();
 
-  const [jobs, pendingCount, dueTodayCount, completedCount] = await Promise.all([
-    prisma.jobs.findMany({
-      where: {
-        user_id: user.user_id,
-        deleted_at: null,
-      },
-      include: {
-        job_status: true,
-      },
-      orderBy: [
-        { due_date: "asc" },
-        { created_at: "desc" },
-      ],
-    }),
-
-    prisma.jobs.count({
-      where: {
-        user_id: user.user_id,
-        deleted_at: null,
-        job_status: {
-          status_name: {
-            equals: "pending",
-            mode: "insensitive",
-          },
+  const jobs = await prisma.jobs.findMany({
+    where: {
+      user_id: user.user_id,
+      deleted_at: null,
+    },
+    select: {
+      job_id: true,
+      job_uuid: true,
+      job_name: true,
+      description: true,
+      due_date: true,
+      notify_at: true,
+      completed_at: true,
+      job_status: {
+        select: {
+          status_name: true,
         },
       },
-    }),
+    },
+    orderBy: [{ due_date: "asc" }, { created_at: "desc" }],
+  });
 
-    prisma.jobs.count({
-      where: {
-        user_id: user.user_id,
-        deleted_at: null,
-        due_date: {
-          gte: today.start,
-          lt: today.end,
-        },
-      },
-    }),
+  const pendingCount = jobs.filter(
+    (job) => job.job_status.status_name.toLowerCase() === "pending"
+  ).length;
 
-    prisma.jobs.count({
-      where: {
-        user_id: user.user_id,
-        deleted_at: null,
-        completed_at: {
-          not: null,
-        },
-      },
-    }),
-  ]);
+  const dueTodayCount = jobs.filter((job) => {
+    if (!job.due_date) return false;
+    return job.due_date >= today.start && job.due_date < today.end;
+  }).length;
+
+  const completedCount = jobs.filter((job) => job.completed_at !== null).length;
 
   const total = pendingCount + completedCount;
   const dailyGoal = total === 0 ? 0 : Math.round((completedCount / total) * 100);

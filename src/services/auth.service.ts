@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { createSession, hashPassword, logout, verifyPassword } from "@/lib/auth";
+import { createSession, getPasswordHashRounds,hashPassword, logout, verifyPassword } from "@/lib/auth";
 
 export async function registerUser(input: {
   user_name: string;
@@ -108,6 +108,19 @@ export async function loginUser(input: {
       message: "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
     };
   }
+
+  const currentRounds = getPasswordHashRounds(user.password);
+    if (currentRounds > 10) {
+    await prisma.users.update({
+        where: {
+        user_id: user.user_id,
+        },
+        data: {
+        password: await hashPassword(password),
+        updated_at: new Date(),
+        },
+    });
+    }
 
   await createSession(user.user_id);
 
