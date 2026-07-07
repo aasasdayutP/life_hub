@@ -1,5 +1,60 @@
 {
-  "node": {},
+  "node": {
+    "00205fb21d2fdfa686348306d3f1faa30734d06f5e": {
+      "workers": {
+        "app/(public)/login/page": {
+          "moduleId": 89186,
+          "async": true,
+          "exportedName": "logoutAction",
+          "filename": "src/app/(public)/actions.ts"
+        },
+        "app/(public)/register/page": {
+          "moduleId": 50455,
+          "async": true,
+          "exportedName": "logoutAction",
+          "filename": "src/app/(public)/actions.ts"
+        }
+      },
+      "filename": "src/app/(public)/actions.ts",
+      "exportedName": "logoutAction"
+    },
+    "40db78bad154876e5fd352da213f5dd1eb0c91affc": {
+      "workers": {
+        "app/(public)/login/page": {
+          "moduleId": 89186,
+          "async": true,
+          "exportedName": "loginAction",
+          "filename": "src/app/(public)/actions.ts"
+        },
+        "app/(public)/register/page": {
+          "moduleId": 50455,
+          "async": true,
+          "exportedName": "loginAction",
+          "filename": "src/app/(public)/actions.ts"
+        }
+      },
+      "filename": "src/app/(public)/actions.ts",
+      "exportedName": "loginAction"
+    },
+    "40e34794afb821d29065c0dcbdcfa50ac8e98644d6": {
+      "workers": {
+        "app/(public)/login/page": {
+          "moduleId": 89186,
+          "async": true,
+          "exportedName": "registerAction",
+          "filename": "src/app/(public)/actions.ts"
+        },
+        "app/(public)/register/page": {
+          "moduleId": 50455,
+          "async": true,
+          "exportedName": "registerAction",
+          "filename": "src/app/(public)/actions.ts"
+        }
+      },
+      "filename": "src/app/(public)/actions.ts",
+      "exportedName": "registerAction"
+    }
+  },
   "edge": {},
   "encryptionKey": "uplszEJIXYjCCVonIaG497HqrzlxJjm/y3aOA/UNPPI="
 }
