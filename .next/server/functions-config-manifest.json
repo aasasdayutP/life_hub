@@ -1,4 +1,55 @@
 {
   "version": 1,
-  "functions": {}
+  "functions": {
+    "/api/auth/login": {
+      "regions": [
+        "sin1"
+      ]
+    },
+    "/api/auth/logout": {
+      "regions": [
+        "sin1"
+      ]
+    },
+    "/api/auth/me": {
+      "regions": [
+        "sin1"
+      ]
+    },
+    "/api/auth/register": {
+      "regions": [
+        "sin1"
+      ]
+    },
+    "/api/jobs": {
+      "regions": [
+        "sin1"
+      ]
+    },
+    "/api/jobs/[job_uuid]": {
+      "regions": [
+        "sin1"
+      ]
+    },
+    "/dashboard": {
+      "regions": [
+        "sin1"
+      ]
+    },
+    "/jobs": {
+      "regions": [
+        "sin1"
+      ]
+    },
+    "/jobs/[job_uuid]": {
+      "regions": [
+        "sin1"
+      ]
+    },
+    "/jobs/new": {
+      "regions": [
+        "sin1"
+      ]
+    }
+  }
 }

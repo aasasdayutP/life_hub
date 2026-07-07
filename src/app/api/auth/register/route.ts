@@ -1,3 +1,5 @@
+export const runtime = "nodejs";
+export const preferredRegion = "sin1";
 import { apiError, apiSuccess } from "@/lib/api-response";
 import { registerUser } from "@/services/auth.service";
 

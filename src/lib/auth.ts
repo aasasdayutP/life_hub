@@ -3,12 +3,13 @@ import { redirect } from "next/navigation";
 import bcrypt from "bcryptjs";
 import crypto from "node:crypto";
 import { prisma } from "@/lib/prisma";
+import { cache } from "react";
 
 const SESSION_COOKIE_NAME = "lifehub_session";
 const SESSION_DAYS = 30;
 
 export async function hashPassword(password: string) {
-  return bcrypt.hash(password, 12);
+  return bcrypt.hash(password, 10);
 }
 
 export async function verifyPassword(password: string, hashedPassword: string) {
@@ -49,7 +50,7 @@ export async function createSession(userId: number) {
   });
 }
 
-export async function getCurrentUser() {
+export const getCurrentUser = cache(async () => {
   const cookieStore = await cookies();
   const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
 
@@ -69,10 +70,20 @@ export async function getCurrentUser() {
         is_active: true,
       },
     },
-    include: {
+    select: {
       users: {
-        include: {
-          roles: true,
+        select: {
+          user_id: true,
+          user_uuid: true,
+          user_name: true,
+          email: true,
+          role_id: true,
+          is_active: true,
+          roles: {
+            select: {
+              role_name: true,
+            },
+          },
         },
       },
     },
@@ -81,8 +92,7 @@ export async function getCurrentUser() {
   if (!session) return null;
 
   return session.users;
-}
-
+});
 export async function requireUser() {
   const user = await getCurrentUser();
 
