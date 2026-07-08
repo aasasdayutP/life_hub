@@ -50,8 +50,20 @@ export async function GET(request: Request) {
             }
           : {}),
       },
-      include: {
-        job_status: true,
+      select: {
+        job_id: true,
+        job_uuid: true,
+        job_name: true,
+        description: true,
+        due_date: true,
+        notify_at: true,
+        completed_at: true,
+        created_at: true,
+        job_status: {
+          select: {
+            status_name: true,
+          },
+        },
       },
       orderBy: [
         {
