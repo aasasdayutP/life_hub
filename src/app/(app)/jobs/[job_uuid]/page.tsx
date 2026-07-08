@@ -29,7 +29,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50 p-4 text-slate-900 lg:p-10">
+    <div className="mx-auto w-full max-w-[1400px] p-4 lg:p-8">
       <div className="mx-auto w-full max-w-3xl">
         <div className="mb-6 flex items-center gap-2 text-sm font-medium text-slate-500">
           <Link
@@ -96,7 +96,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
           </div>
         </article>
       </div>
-    </main>
+    </div>
   );
 }
 

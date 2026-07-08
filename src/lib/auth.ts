@@ -55,12 +55,19 @@ export async function createSession(userId: number) {
 }
 
 export const getCurrentUser = cache(async () => {
+  const totalStart = Date.now();
+
   const cookieStore = await cookies();
   const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
 
-  if (!token) return null;
+  if (!token) {
+    console.log(`[AUTH] no token ${Date.now() - totalStart}ms`);
+    return null;
+  }
 
   const tokenHash = hashSessionToken(token);
+
+  const queryStart = Date.now();
 
   const session = await prisma.sessions.findFirst({
     where: {
@@ -93,10 +100,14 @@ export const getCurrentUser = cache(async () => {
     },
   });
 
+  console.log(`[AUTH] session query ${Date.now() - queryStart}ms`);
+  console.log(`[AUTH] total ${Date.now() - totalStart}ms`);
+
   if (!session) return null;
 
   return session.users;
 });
+
 export async function requireUser() {
   const user = await getCurrentUser();
 

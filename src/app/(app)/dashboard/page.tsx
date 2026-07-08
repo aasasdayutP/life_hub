@@ -5,7 +5,7 @@ export default async function DashboardPage() {
   const user = await requireUser();
 
   return (
-    <main className="min-h-screen bg-slate-50 p-6 text-slate-900">
+    <div className="mx-auto w-full max-w-[1400px] p-4 lg:p-8">
       <div className="mx-auto max-w-6xl">
         <div className="mb-8 rounded-3xl border border-slate-100 bg-white p-6 shadow-sm">
           <p className="text-sm font-medium text-blue-600">Life Hub</p>
@@ -22,7 +22,7 @@ export default async function DashboardPage() {
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-bold text-slate-800">Tasks</h2>
               <Link
-                href="/jobs"
+                href="/jobs" prefetch={false}
                 className="text-sm font-semibold text-blue-600 hover:text-blue-700"
               >
                 Go to App
@@ -34,7 +34,7 @@ export default async function DashboardPage() {
             </p>
 
             <Link
-              href="/jobs/new"
+              href="/jobs/new" prefetch={false}
               className="mt-5 inline-flex rounded-xl bg-blue-600 px-4 py-2 text-sm font-bold text-white hover:bg-blue-700"
             >
               + Add Task
@@ -52,6 +52,6 @@ export default async function DashboardPage() {
           </section>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

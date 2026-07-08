@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
@@ -15,6 +14,15 @@ export default function NewJobPage() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  function handleCancel() {
+    if (window.history.length > 1) {
+      router.back();
+      return;
+    }
+
+    router.push("/jobs");
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -52,7 +60,6 @@ export default function NewJobPage() {
       }
 
       router.push("/jobs");
-      router.refresh();
     } catch (error) {
       console.error("CREATE_JOB_CLIENT_ERROR", error);
       setErrorMessage("เกิดข้อผิดพลาด ลองใหม่อีกครั้ง");
@@ -62,15 +69,16 @@ export default function NewJobPage() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50 p-4 text-slate-900 lg:p-10">
+    <div className="w-full p-4 lg:p-10">
       <div className="mx-auto w-full max-w-2xl">
         <div className="mb-6 flex items-center gap-2 text-sm font-medium text-slate-500">
-          <Link
-            href="/jobs"
+          <button
+            type="button"
+            onClick={handleCancel}
             className="flex items-center gap-1 transition-colors hover:text-slate-900"
           >
             ← To-Do List
-          </Link>
+          </button>
           <span>/</span>
           <span className="text-blue-600">New Task</span>
         </div>
@@ -152,12 +160,13 @@ export default function NewJobPage() {
             </div>
 
             <div className="flex items-center justify-end gap-3 border-t border-slate-100 pt-8">
-              <Link
-                href="/jobs"
+              <button
+                type="button"
+                onClick={handleCancel}
                 className="rounded-xl px-6 py-3 text-sm font-semibold text-slate-600 transition-colors hover:bg-slate-100"
               >
                 Cancel
-              </Link>
+              </button>
 
               <button
                 type="submit"
@@ -170,7 +179,7 @@ export default function NewJobPage() {
           </form>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
 

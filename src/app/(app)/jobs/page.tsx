@@ -44,7 +44,7 @@ export default async function JobsPage() {
   const dailyGoal = total === 0 ? 0 : Math.round((completedCount / total) * 100);
 
   return (
-    <main className="min-h-screen bg-slate-50 p-4 text-slate-900 lg:p-10">
+    <div className="mx-auto w-full max-w-[1400px] p-4 lg:p-8">
       <div className="mx-auto w-full max-w-7xl">
         <div className="mb-8 flex items-end justify-between">
           <div>
@@ -184,7 +184,7 @@ export default async function JobsPage() {
           </aside>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
 
