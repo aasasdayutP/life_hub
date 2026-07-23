@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import crypto from "node:crypto";
 import { prisma } from "@/lib/prisma";
 import { cache } from "react";
+import { encryptSessionToken } from "./session-token";
 
 const SESSION_COOKIE_NAME = "lifehub_session";
 const SESSION_DAYS = 30;
@@ -20,29 +21,47 @@ export async function verifyPassword(password: string, hashedPassword: string) {
   return bcrypt.compare(password, hashedPassword);
 }
 
-function createPlainSessionToken() {
-  return crypto.randomBytes(32).toString("base64url");
-}
+// function createPlainSessionToken() {
+//   return crypto.randomBytes(32).toString("base64url");
+// }
 
 function hashSessionToken(token: string) {
   return crypto.createHash("sha256").update(token).digest("hex");
 }
 
-export async function createSession(userId: number) {
-  const token = createPlainSessionToken();
-  const tokenHash = hashSessionToken(token);
+export async function createSession(user:{
+  user_id: number;
+  user_uuid: string;
+  role: string;
+}) {
+  // const token = createPlainSessionToken();
+  // const tokenHash = hashSessionToken(token);
+  
+  const tokenHash = crypto.randomBytes(32).toString("hex");
 
   const expiresAt = new Date();
   expiresAt.setDate(expiresAt.getDate() + SESSION_DAYS);
 
-  await prisma.sessions.create({
+  
+  const session = await prisma.sessions.create({
     data: {
-      user_id: userId,
+      user_id: user.user_id,
       token_hash: tokenHash,
       expires_at: expiresAt,
     },
+    select: {
+      session_id: true,
+    }
   });
-
+  
+  const token = await encryptSessionToken({
+      session_id: session.session_id, 
+      user_id: user.user_id,
+      user_uuid: user.user_uuid,
+      role: user.role,
+    }, 
+    expiresAt
+  );
   const cookieStore = await cookies();
 
   cookieStore.set(SESSION_COOKIE_NAME, token, {
