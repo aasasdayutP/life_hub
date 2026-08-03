@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import crypto from "node:crypto";
 import { prisma } from "@/lib/prisma";
 import { cache } from "react";
-import { encryptSessionToken } from "./session-token";
+import { encryptSessionToken,decryptSessionToken } from "./session-token";
 
 const SESSION_COOKIE_NAME = "lifehub_session";
 const SESSION_DAYS = 30;
@@ -25,18 +25,18 @@ export async function verifyPassword(password: string, hashedPassword: string) {
 //   return crypto.randomBytes(32).toString("base64url");
 // }
 
-function hashSessionToken(token: string) {
-  return crypto.createHash("sha256").update(token).digest("hex");
-}
+// function hashSessionToken(token: string) {
+//   return crypto.createHash("sha256").update(token).digest("hex");
+// }
 
 export async function createSession(user:{
   user_id: number;
   user_uuid: string;
-  role: string;
 }) {
   // const token = createPlainSessionToken();
   // const tokenHash = hashSessionToken(token);
   
+  // ยังเอา crypto ไว้เพราะเอาไว้สุ่มไว้จะได้ไม่ต้องแก้ schema 5555
   const tokenHash = crypto.randomBytes(32).toString("hex");
 
   const expiresAt = new Date();
@@ -58,7 +58,6 @@ export async function createSession(user:{
       session_id: session.session_id, 
       user_id: user.user_id,
       user_uuid: user.user_uuid,
-      role: user.role,
     }, 
     expiresAt
   );
@@ -84,18 +83,23 @@ export const getCurrentUser = cache(async () => {
     return null;
   }
 
-  const tokenHash = hashSessionToken(token);
-
-  const queryStart = Date.now();
+  let payload;
+  try {
+    payload = await decryptSessionToken(token);
+  } catch (error) {
+    return null;
+  }
 
   const session = await prisma.sessions.findFirst({
     where: {
-      token_hash: tokenHash,
+      session_id: payload.session_id,
+      user_id: payload.user_id,
       deleted_at: null,
       expires_at: {
         gt: new Date(),
       },
       users: {
+        user_uuid: payload.user_uuid,
         deleted_at: null,
         is_active: true,
       },
@@ -118,8 +122,27 @@ export const getCurrentUser = cache(async () => {
       },
     },
   });
+  // const tokenHash = hashSessionToken(token);
 
-  console.log(`[AUTH] session query ${Date.now() - queryStart}ms`);
+  // const queryStart = Date.now();
+
+  // const session = await prisma.sessions.findFirst({
+  //   where: {
+  //     token_hash: tokenHash,
+  //     deleted_at: null,
+  //     expires_at: {
+  //       gt: new Date(),
+  //     },
+  //     users: {
+  //       deleted_at: null,
+  //       is_active: true,
+  //     },
+  //   },
+    
+  // });
+
+
+  // console.log(`[AUTH] session query ${Date.now() - queryStart}ms`);
   console.log(`[AUTH] total ${Date.now() - totalStart}ms`);
 
   if (!session) return null;
@@ -142,18 +165,21 @@ export async function logout() {
   const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
 
   if (token) {
-    const tokenHash = hashSessionToken(token);
+    try {
+      const payload = await decryptSessionToken(token);
 
     await prisma.sessions.updateMany({
       where: {
-        token_hash: tokenHash,
+        session_id: payload.session_id,
+        user_id: payload.user_id,
         deleted_at: null,
       },
       data: {
         deleted_at: new Date(),
       },
     });
+  }catch {
   }
-
   cookieStore.delete(SESSION_COOKIE_NAME);
+  }
 }

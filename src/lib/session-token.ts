@@ -18,7 +18,6 @@ export type SessionTokenPayload = {
   session_id: number;
   user_id: number;
   user_uuid: string;
-  role: string;
 };
 
 export async function encryptSessionToken(
@@ -29,7 +28,6 @@ export async function encryptSessionToken(
     session_id: payload.session_id,
     user_id: payload.user_id,
     user_uuid: payload.user_uuid,
-    role: payload.role,
   })
     .setProtectedHeader({
       alg: "dir",
@@ -62,8 +60,7 @@ function parseSessionPayload(
   if (
     typeof sessionId !== "number" ||
     typeof userId !== "number" ||
-    typeof userUuid !== "string" ||
-    typeof role !== "string"
+    typeof userUuid !== "string" 
   ) {
     throw new Error("Invalid session token payload");
   }
@@ -72,6 +69,5 @@ function parseSessionPayload(
     session_id: sessionId,
     user_id: userId,
     user_uuid: userUuid,
-    role,
   };
 }

@@ -52,7 +52,10 @@ export async function registerAction(formData: FormData) {
     },
   });
 
-  await createSession(user.user_id);
+  await createSession({
+    user_id: user.user_id,
+    user_uuid: user.user_uuid,
+  });
 
   redirect("/dashboard");
 }
@@ -81,7 +84,10 @@ export async function loginAction(formData: FormData) {
     redirect("/login?error=invalid");
   }
 
-  await createSession(user.user_id);
+  await createSession({
+    user_id: user.user_id,
+    user_uuid: user.user_uuid,
+  });
 
   redirect("/dashboard");
 }
