@@ -1,25 +1,13 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
-import { registerAction } from "@/app/(public)/actions";
 import { getCurrentUser } from "@/lib/auth";
+import RegisterForm from "./RegisterForm";
 
-type RegisterPageProps = {
-  searchParams?: Promise<{
-    error?: string;
-  }>;
-};
-
-export default async function RegisterPage({
-  searchParams,
-}: RegisterPageProps) {
+export default async function RegisterPage() {
   const user = await getCurrentUser();
 
   if (user) {
     redirect("/dashboard");
   }
-
-  const params = await searchParams;
-  const errorMessage = getErrorMessage(params?.error);
 
   return (
     <main className="flex min-h-screen bg-white">
@@ -52,83 +40,9 @@ export default async function RegisterPage({
             </p>
           </div>
 
-          {errorMessage ? (
-            <div className="rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
-              {errorMessage}
-            </div>
-          ) : null}
-
-          <form action={registerAction} className="space-y-6">
-            <div className="space-y-5">
-              <div>
-                <label className="mb-1.5 block text-sm font-medium text-slate-700">
-                  Name
-                </label>
-                <input
-                  name="user_name"
-                  type="text"
-                  required
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition-all focus:border-transparent focus:bg-white focus:ring-2 focus:ring-blue-500"
-                  placeholder="Your name"
-                />
-              </div>
-
-              <div>
-                <label className="mb-1.5 block text-sm font-medium text-slate-700">
-                  Email address
-                </label>
-                <input
-                  name="email"
-                  type="email"
-                  required
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition-all focus:border-transparent focus:bg-white focus:ring-2 focus:ring-blue-500"
-                  placeholder="you@example.com"
-                />
-              </div>
-
-              <div>
-                <label className="mb-1.5 block text-sm font-medium text-slate-700">
-                  Password
-                </label>
-                <input
-                  name="password"
-                  type="password"
-                  required
-                  minLength={6}
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition-all focus:border-transparent focus:bg-white focus:ring-2 focus:ring-blue-500"
-                  placeholder="อย่างน้อย 6 ตัวอักษร"
-                />
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              className="flex w-full items-center justify-center gap-2 rounded-xl border border-transparent bg-blue-600 px-4 py-3.5 text-sm font-bold text-white shadow-sm shadow-blue-500/30 transition-all hover:bg-blue-700 active:scale-[0.98]"
-            >
-              Create account →
-            </button>
-          </form>
-
-          <p className="text-center text-sm text-slate-500">
-            มีบัญชีแล้ว?{" "}
-            <Link href="/login" className="font-semibold text-blue-600 hover:text-blue-700">
-              Sign in
-            </Link>
-          </p>
+          <RegisterForm />
         </div>
       </section>
     </main>
   );
-}
-
-function getErrorMessage(error?: string) {
-  if (!error) return null;
-
-  const messages: Record<string, string> = {
-    missing: "กรอกข้อมูลให้ครบก่อน",
-    password_short: "รหัสผ่านต้องยาวอย่างน้อย 6 ตัวอักษร",
-    email_used: "อีเมลนี้ถูกใช้งานแล้ว",
-  };
-
-  return messages[error] || "เกิดข้อผิดพลาด ลองใหม่อีกครั้ง";
 }

@@ -61,12 +61,18 @@ export default function AppShell({ user, children }: AppShellProps) {
     setIsLoggingOut(true);
 
     try {
-      await fetch("/api/auth/logout", {
+      const response = await fetch("/api/auth/logout", {
         method: "POST",
       });
 
+      if (!response.ok) {
+        return;
+      }
+
       router.replace("/login");
       router.refresh();
+    } catch {
+      return;
     } finally {
       setIsLoggingOut(false);
     }
@@ -296,10 +302,13 @@ export default function AppShell({ user, children }: AppShellProps) {
         <button
           type="button"
           onClick={handleLogout}
-          className="flex h-12 w-16 flex-col items-center justify-center text-slate-400 hover:text-slate-800"
+          disabled={isLoggingOut}
+          className="flex h-12 w-16 flex-col items-center justify-center text-slate-400 hover:text-slate-800 disabled:opacity-50"
         >
           <span className="text-2xl">👤</span>
-          <span className="text-[10px] font-medium">Profile</span>
+          <span className="text-[10px] font-medium">
+            {isLoggingOut ? "Logout..." : "Profile"}
+          </span>
         </button>
       </nav>
     </div>

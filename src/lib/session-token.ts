@@ -9,9 +9,7 @@ if (!secretValue) {
 const secretKey = Buffer.from(secretValue, "base64url");
 
 if (secretKey.length !== 32) {
-  throw new Error(
-    "SESSION_TOKEN_SECRET must decode to exactly 32 bytes"
-  );
+  throw new Error("SESSION_TOKEN_SECRET must decode to exactly 32 bytes");
 }
 
 export type SessionTokenPayload = {
@@ -49,18 +47,15 @@ export async function decryptSessionToken(
   return parseSessionPayload(payload);
 }
 
-function parseSessionPayload(
-  payload: JWTPayload
-): SessionTokenPayload {
+function parseSessionPayload(payload: JWTPayload): SessionTokenPayload {
   const sessionId = payload.session_id;
   const userId = payload.user_id;
   const userUuid = payload.user_uuid;
-  const role = payload.role;
 
   if (
     typeof sessionId !== "number" ||
     typeof userId !== "number" ||
-    typeof userUuid !== "string" 
+    typeof userUuid !== "string"
   ) {
     throw new Error("Invalid session token payload");
   }
