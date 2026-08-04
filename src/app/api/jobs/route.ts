@@ -9,8 +9,8 @@ import { prisma } from "@/lib/prisma";
  * /api/jobs:
  *   get:
  *     tags:
- *       - Jobs
- *     summary: List jobs
+ *       - Tasks
+ *     summary: List tasks
  *     description: Requires an active HttpOnly lifehub_session cookie. Returns jobs owned by the current user, optionally filtered by status and search text.
  *     security:
  *       - cookieAuth: []
@@ -179,8 +179,8 @@ export async function GET(request: Request) {
  * /api/jobs:
  *   post:
  *     tags:
- *       - Jobs
- *     summary: Create a job
+ *       - Tasks
+ *     summary: Create a tasks
  *     description: Requires an active HttpOnly lifehub_session cookie. Creates a job for the current user with the pending status.
  *     security:
  *       - cookieAuth: []

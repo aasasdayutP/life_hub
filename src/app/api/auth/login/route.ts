@@ -26,7 +26,7 @@ import { loginUser } from "@/services/auth.service";
  *               email:
  *                 type: string
  *                 format: email
- *                 example: captain@example.com
+ *                 example: email@example.com
  *               password:
  *                 type: string
  *                 format: password
@@ -35,7 +35,7 @@ import { loginUser } from "@/services/auth.service";
  *             login:
  *               summary: Login request
  *               value:
- *                 email: captain@example.com
+ *                 email: email@example.com
  *                 password: password123
  *     responses:
  *       200:
@@ -68,7 +68,7 @@ import { loginUser } from "@/services/auth.service";
  *                       user_id: 1
  *                       user_uuid: 6f1f01b4-3a8b-49a1-b8e0-5d68001f6ef1
  *                       user_name: Captain
- *                       email: captain@example.com
+ *                       email: email@example.com
  *                       role_id: 1
  *       400:
  *         description: Invalid JSON body or missing email/password

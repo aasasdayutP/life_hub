@@ -30,7 +30,7 @@ export function getApiDocs() {
       servers,
       tags: [
         { name: "Auth", description: "Authentication and session endpoints" },
-        { name: "Jobs", description: "To-do jobs endpoints" },
+        { name: "Tasks", description: "To-do tasks endpoints" },
         { name: "Money", description: "Money endpoints" },
         { name: "Beer Memory", description: "Beer memory endpoints" },
         { name: "Agent", description: "Agent endpoints" },

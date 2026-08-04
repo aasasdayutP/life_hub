@@ -15,9 +15,9 @@ type RouteContext = {
  * /api/jobs/{job_uuid}:
  *   get:
  *     tags:
- *       - Jobs
- *     summary: Get job detail
- *     description: Requires an active HttpOnly lifehub_session cookie. Returns one non-deleted job owned by the current user.
+ *       - Tasks
+ *     summary: Get task detail
+ *     description: Requires an active HttpOnly lifehub_session cookie. Returns one non-deleted task owned by the current user.
  *     security:
  *       - cookieAuth: []
  *     parameters:
@@ -27,7 +27,7 @@ type RouteContext = {
  *         schema:
  *           type: string
  *           format: uuid
- *         description: Public UUID of the job.
+ *         description: Public UUID of the task.
  *         example: 0a18e4ef-6ad2-4c41-bb3a-922c8265b576
  *     responses:
  *       200:
@@ -159,9 +159,9 @@ export async function GET(_request: Request, { params }: RouteContext) {
  * /api/jobs/{job_uuid}:
  *   patch:
  *     tags:
- *       - Jobs
- *     summary: Update a job
- *     description: Requires an active HttpOnly lifehub_session cookie. Updates provided fields on one non-deleted job owned by the current user.
+ *       - Tasks
+ *     summary: Update a task
+ *     description: Requires an active HttpOnly lifehub_session cookie. Updates provided fields on one non-deleted task owned by the current user.
  *     security:
  *       - cookieAuth: []
  *     parameters:
@@ -171,7 +171,7 @@ export async function GET(_request: Request, { params }: RouteContext) {
  *         schema:
  *           type: string
  *           format: uuid
- *         description: Public UUID of the job.
+ *         description: Public UUID of the task.
  *         example: 0a18e4ef-6ad2-4c41-bb3a-922c8265b576
  *     requestBody:
  *       required: true
@@ -447,9 +447,9 @@ export async function PATCH(request: Request, { params }: RouteContext) {
  * /api/jobs/{job_uuid}:
  *   delete:
  *     tags:
- *       - Jobs
- *     summary: Delete a job
- *     description: Requires an active HttpOnly lifehub_session cookie. Soft-deletes one non-deleted job owned by the current user.
+ *       - Tasks
+ *     summary: Delete a task
+ *     description: Requires an active HttpOnly lifehub_session cookie. Soft-deletes one non-deleted task owned by the current user.
  *     security:
  *       - cookieAuth: []
  *     parameters:
